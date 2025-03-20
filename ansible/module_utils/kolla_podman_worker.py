@@ -287,6 +287,8 @@ class PodmanWorker(ContainerWorker):
         name = self.params.get("name")
         for cont in self.pc.containers.list(all=True):
             cont.reload()
+            if 'ceph' in cont.image:
+                continue
             if name == cont.name:
                 return cont
 
