@@ -286,9 +286,10 @@ class PodmanWorker(ContainerWorker):
     def check_container(self):
         name = self.params.get("name")
         for cont in self.pc.containers.list(all=True):
-            cont.reload()
-            for tag in cont.image.tags:
-                if 'ceph' in tag:
+            try:
+                cont.reload()
+            except APIError as e:
+                if e.status_code == 404:
                     continue
             if name == cont.name:
                 return cont
