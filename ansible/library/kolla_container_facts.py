@@ -140,7 +140,10 @@ class ContainerFactsWorker():
 
         containers = self.client.containers.list()
         for container in containers:
-            container.reload()
+            try:
+                container.reload()
+            except Exception as e:
+                continue
             container_name = container.name
             if names and container_name not in names:
                 continue
