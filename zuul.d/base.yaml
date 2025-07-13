@@ -211,7 +211,6 @@
     voting: false
     files: !inherit
       - ^ansible/roles/nova/
-      - ^ansible/roles/nova-cell/
       - ^ansible/roles/loadbalancer/
       - ^tests/test-core-openstack.sh
       - ^tests/test-proxysql.sh
