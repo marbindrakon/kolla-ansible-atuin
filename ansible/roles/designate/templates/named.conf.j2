@@ -16,8 +16,30 @@ options {
         {% endif %}
         minimal-responses yes;
         allow-notify { {% for host in groups['designate-worker'] %}{{ 'api' | kolla_address(host) }};{% endfor %} };
+{% for mdns_host in groups['designate-mdns'] %}
+        - host: {{ 'dns' | kolla_address(mdns_host) }}
+          port: {{ designate_mdns_port }}
+{% if designate_use_catalog_zone %}
+	catalog-zones {
+		zone "{{ designate_catalog_zone_fqdn }}" default-masters {
+		{% for mdns_host in groups['designate-mdns'] %}
+			{{ 'dns' | kolla_address(mdns_host) }}:{{ designate_mdns_port }};
+		{% endfor %}
+		};
+	};
+{% endif %}
 };
-
+{% if designate_use_catalog_zone %}
+zone "{{ designate_catalog_zone_fqdn }}" {
+	type secondary;
+	file "catalog.db";
+	masters {
+	{% for mdns_host in groups['designate-mdns'] %}
+		{{ 'dns' | kolla_address(mdns_host) }}:{{ designate_mdns_port }};
+	{% endfor %}
+	};
+};
+{% endif %}
 controls {
         inet {{ 'api' | kolla_address }} port {{ designate_rndc_port }} allow { {% for host in groups['designate-worker'] %}{{ 'api' | kolla_address(host) }}; {% endfor %} } keys { "rndc-key"; };
 };
