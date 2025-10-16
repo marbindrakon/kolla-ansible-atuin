@@ -5,7 +5,7 @@
   attributes: {}
 {% if designate_use_catalog_zone %}
   catalog_zone:
-    catalog_zone_fqdn: {{ designate_catalog_zone_fqdn }}
+    catalog_zone_fqdn: {{ designate_catalog_zone_fqdn }}.
     catalog_zone_refresh: 60
 {% endif %}
   ns_records:
