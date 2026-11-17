@@ -97,7 +97,7 @@
       {{
         certificates_path.files |
         map(attribute='path') |
-        map('regex_replace', '^.*/(.*)\\.pem$', '\\1#' + keystone_container_federation_oidc_idp_certificate_folder + '/\\1.pem') | list
+        map('regex_replace', '^.*/(.*)\.pem$', '\1#' + keystone_container_federation_oidc_idp_certificate_folder + '/\1.pem') | list
       }}
   when:
     - inventory_hostname in groups[keystone.group]
